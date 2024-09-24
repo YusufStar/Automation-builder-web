@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "@/components/ui/theme-providers";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/providers/theme-provider";
+import ModalProvider from "@/providers/modal-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { BillingProvider } from "@/providers/billing-provider";
 
 const font = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Fuzzie Automation",
-  description: "Automation Web App",
+  title: "Fuzzie.",
+  description: "Automate Your Work With Fuzzie.",
 };
 
 export default function RootLayout({
@@ -17,14 +20,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${font.className} antialiased`}>
+      <body className={font.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <BillingProvider>
+            <ModalProvider>
+              {children}
+              <Toaster />
+            </ModalProvider>
+          </BillingProvider>
         </ThemeProvider>
       </body>
     </html>
